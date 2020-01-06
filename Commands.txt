@@ -1,0 +1,62 @@
+//adding ssh certificate
+
+export PROJECT_ID='testproject-263007'
+
+gcloud iam service-accounts create ssh-account --project $PROJECT_ID \
+   --display-name "ssh-account"
+
+gcloud compute networks create ssh-example --project $PROJECT_ID
+
+gcloud compute firewall-rules create ssh-all --project $PROJECT_ID \
+   --network ssh-example --allow tcp:22
+
+gcloud compute instances create target --project $PROJECT_ID \
+   --zone us-central1-f --network ssh-example \
+   --no-service-account --no-scopes \
+   --machine-type f1-micro --metadata=enable-oslogin=TRUE
+
+
+gcloud compute instances add-iam-policy-binding target \
+   --project $PROJECT_ID --zone us-central1-f \
+   --member serviceAccount:ssh-account@$PROJECT_ID.iam.gserviceaccount.com \
+   --role roles/compute.osAdminLogin
+
+
+gcloud compute instances create source \
+   --project $PROJECT_ID --zone us-central1-f \
+   --service-account ssh-account@$PROJECT_ID.iam.gserviceaccount.com  \
+   --scopes https://www.googleapis.com/auth/cloud-platform \
+   --network ssh-example --machine-type f1-micro
+
+
+//installing docker
+//initialy needs to log in to google cloud instance using google cloud console
+
+gcloud auth login
+
+gcloud config set project testproject-263007
+
+#!/bin/sh
+echo "Hello, world! The time is $(date)."
+
+FROM alpine
+COPY quickstart.sh /
+CMD ["/quickstart.sh"]
+
+//in new terminal window
+chmod +x quickstart.sh
+
+//build using docker file
+gcloud builds submit --tag gcr.io/testproject-263007/quickstart-image .
+
+
+//connecting mysql db using jphister
+mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8 --explicit_defaults_for_timestamp
+
+//configure CI tool to google instance
+cd myApp
+gcloud app deploy app.yaml
+gcloud app browse
+
+Source - https://cloud.google.com/source-repositories/docs/quickstart-triggering-builds-with-source-repositories
+

@@ -1,0 +1,11 @@
+2) a)Private key stays with the user (and only there), while the public key is sent to the server. Typically with the ssh-copy-id utility.
+	b)A public key that is copied to the SSH server(s). Anyone with a copy of the public key can encrypt data which can then only be read by the person who holds the corresponding private key.
+	c)SSH allows for the encryption of data so that those malicious would-be attackers cannot access your user information and passwords. SSH also allows for the tunneling of other protocols such as FTP. Below is a list of specific things SSH protects you from.
+
+
+3)a)Docker really makes it easier to create, deploy, and run applications by using containers, and containers allow a developer to package up an application with all of the parts it needs, such as libraries and other dependencies, and ship it all out as one package. By doing so, the developer can be assured that the application will run on any other Linux machine regardless of any customized settings that machine might have that could differ from the machine used for writing and testing the code.
+
+source :- https://dzone.com/articles/top-10-benefits-of-using-docker
+
+6)Continouse Integration(CI) is basically automating the process of building and testing of a software product. It is usually happens when any member commits their change to the repository.CI encourages developers to share their code and unit tests by merging their changes into a shared version control repository after every small task completion.
+ 
